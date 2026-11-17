@@ -71,6 +71,28 @@ def calculate_strength_score(length_ok: bool, char_analysis: Dict[str, bool]) ->
 
 
 # TODO (Iriome): Add generate_secure_password function here
+def generate_secure_password(length: int = 14) -> str:
+"""
+Generates a random, cryptographically strong password containing all
+character types.
+Args:
+length (int): Desired length of the generated password (default is
+14).
+Returns:
+str: A newly generated strong password.
+"""
+password_chars = [
+random.choice(string.ascii_uppercase),
+random.choice(string.ascii_lowercase),
+random.choice(string.digits),
+random.choice("!@#$%^&*()-_=+")
+]
+all_chars = string.ascii_letters + string.digits + "!@#$%^&*()-_=+"
+remaining_length = max(0, length - 4)
+password_chars.extend(random.choice(all_chars) for _ in
+range(remaining_length))
+random.shuffle(password_chars)
+return "".join(password_chars)
 
 
 # TODO (Josè): Add format_security_report function here
@@ -96,6 +118,9 @@ if __name__ == "__main__":
         # Marko
         final_score = calculate_strength_score(is_long_enough, char_breakdown)
         print(f"Calculated score: {final_score}/100")
+        # 4. Test password generator (Iriome)
+        if final_score < 85:
+            print(f"Sample strong password: {generate_secure_password(14)}")
 
         # TODO: Call the remaining team functions once added
         
