@@ -45,7 +45,26 @@ def analyze_character_types(password: str) -> Dict[str, bool]:
     return analysis
     
 
-# ---
+# Marko
+def calculate_strength_score(length_ok: bool, char_analysis: Dict[str, bool]) -> int:
+    """
+    Computes a security score from 0 to 100 based on length and character variety.
+    Args:
+        length_ok (bool): Whether the password meets the length requirement.
+        char_analysis (Dict[str, bool]): Presence of different character types.
+    Returns:
+        int: Total security score (0-100).
+    """
+    score = 0
+
+    if length_ok:
+        score += 40
+
+    for is_present in char_analysis.values():
+        if is_present:
+            score += 15
+
+    return min(score, 100)
 
 
 # TODO (Marko): Add calculate_strength_score function here
@@ -70,11 +89,16 @@ if __name__ == "__main__":
         is_long_enough = check_password_length(user_password)
         print(f"Length check (>= 12 chars): {'Passed' if is_long_enough else 'Failed'} ({len(user_password)} chars)")
 
-        # TODO: Call the remaining team functions once added
-
         # Justin
         char_breakdown = analyze_character_types(user_password)
         print(f"Character breakdown: {char_breakdown}")
+
+        # Marko
+        final_score = calculate_strength_score(is_long_enough, char_breakdown)
+        print(f"Calculated score: {final_score}/100")
+
+        # TODO: Call the remaining team functions once added
+        
     
     else:
         print("\nError: Empty input. Please run the program again and enter a password.")
