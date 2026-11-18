@@ -23,8 +23,6 @@ def check_password_length(password: str, min_length: int = 12) -> bool:
 
 
 # Justin
-
-
 def analyze_character_types(password: str) -> Dict[str, bool]:
     """
     Checks which character categories are present in the password.
@@ -66,36 +64,32 @@ def calculate_strength_score(length_ok: bool, char_analysis: Dict[str, bool]) ->
 
     return min(score, 100)
 
-
-# TODO (Marko): Add calculate_strength_score function here
-
-
-# TODO (Iriome): Add generate_secure_password function here
+# Iriome
 def generate_secure_password(length: int = 14) -> str:
-"""
-Generates a random, cryptographically strong password containing all
-character types.
-Args:
-length (int): Desired length of the generated password (default is
-14).
-Returns:
-str: A newly generated strong password.
-"""
-password_chars = [
-random.choice(string.ascii_uppercase),
-random.choice(string.ascii_lowercase),
-random.choice(string.digits),
-random.choice("!@#$%^&*()-_=+")
-]
-all_chars = string.ascii_letters + string.digits + "!@#$%^&*()-_=+"
-remaining_length = max(0, length - 4)
-password_chars.extend(random.choice(all_chars) for _ in
-range(remaining_length))
-random.shuffle(password_chars)
-return "".join(password_chars)
+    """
+    Generates a random, cryptographically strong password containing all
+    character types.
+    Args:
+    length (int): Desired length of the generated password (default is
+    14).
+    Returns:
+    str: A newly generated strong password.
+    """
+    password_chars = [
+        random.choice(string.ascii_uppercase),
+        random.choice(string.ascii_lowercase),
+        random.choice(string.digits),
+        random.choice("!@#$%^&*()-_=+")
+    ]
+    all_chars = string.ascii_letters + string.digits + "!@#$%^&*()-_=+"
+    remaining_length = max(0, length - 4)
+    password_chars.extend(random.choice(all_chars) for _ in
+    range(remaining_length))
+    random.shuffle(password_chars)
+    return "".join(password_chars)
 
 
-# José: Add format_security_report function here
+# Jose
 def format_security_report(password: str, score: int, char_analysis: Dict[str, bool]) -> str:
     """
     Formats the audit results into a readable report and suggests a new password
@@ -134,6 +128,8 @@ def format_security_report(password: str, score: int, char_analysis: Dict[str, b
         report += "\n[OK] Great job! Your password meets high security standards.\n"
 
     report += "========================================"
+    return report
+
 
 # --- Interactive Execution ---
 if __name__ == "__main__":
@@ -144,23 +140,11 @@ if __name__ == "__main__":
     user_password = input("Enter a password to test its strength: ").strip()
 
     if user_password:
-        # 1. Check length (Nicolò)
         is_long_enough = check_password_length(user_password)
-        print(f"Length check (>= 12 chars): {'Passed' if is_long_enough else 'Failed'} ({len(user_password)} chars)")
-
-        # Justin
         char_breakdown = analyze_character_types(user_password)
-        print(f"Character breakdown: {char_breakdown}")
-
-        # Marko
         final_score = calculate_strength_score(is_long_enough, char_breakdown)
-        print(f"Calculated score: {final_score}/100")
-        # 4. Test password generator (Iriome)
-        if final_score < 85:
-            print(f"Sample strong password: {generate_secure_password(14)}")
-
-        # TODO: Call the remaining team functions once added
         
-    
+        report_output = format_security_report(user_password, final_score, char_breakdown)
+        print(report_output)
     else:
         print("\nError: Empty input. Please run the program again and enter a password.")
