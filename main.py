@@ -95,8 +95,45 @@ random.shuffle(password_chars)
 return "".join(password_chars)
 
 
-# TODO (Josè): Add format_security_report function here
+# José: Add format_security_report function here
+def format_security_report(password: str, score: int, char_analysis: Dict[str, bool]) -> str:
+    """
+    Formats the audit results into a readable report and suggests a new password
+    if weak.
 
+    Args:
+        password (str): The evaluated password.
+        score (int): Calculated security score (0-100).
+        char_analysis (Dict[str, bool]): Character breakdown.
+
+    Returns:
+        str: Formatted final security report.
+    """
+    if score >= 85:
+        rating = "STRONG"
+    elif score >= 55:
+        rating = "MEDIUM"
+    else:
+        rating = "WEAK"
+
+    report = "\n========================================\n"
+    report += "    ONEBITBRAINS PASSWORD AUDIT REPORT   \n"
+    report += "========================================\n"
+    report += f"Password Length : {len(password)} characters\n"
+    report += f"Uppercase       : {'Yes' if char_analysis['uppercase'] else 'No'}\n"
+    report += f"Lowercase       : {'Yes' if char_analysis['lowercase'] else 'No'}\n"
+    report += f"Numbers         : {'Yes' if char_analysis['digits'] else 'No'}\n"
+    report += f"Symbols         : {'Yes' if char_analysis['symbols'] else 'No'}\n"
+    report += f"\nSecurity Score  : {score}/100 ({rating})\n"
+
+    if score < 85:
+        suggested = generate_secure_password(14)
+        report += "\n[!] Recommendation: Your password can be improved.\n"
+        report += f"[+] Suggested Strong Password: {suggested}\n"
+    else:
+        report += "\n[OK] Great job! Your password meets high security standards.\n"
+
+    report += "========================================"
 
 # --- Interactive Execution ---
 if __name__ == "__main__":
